@@ -14,7 +14,7 @@ def calculate(op, rand1, rand2):
         return rand1 - rand2        
     elif op == 2:
         return rand1 * rand2
-    elif op == 3:
+    else:
         if rand1 < 0:
             return -(-rand1 // rand2)
         else:
