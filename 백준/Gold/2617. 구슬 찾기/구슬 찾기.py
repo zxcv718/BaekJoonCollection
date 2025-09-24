@@ -26,13 +26,14 @@ def bfs_count(start, graph, limit):
             if not visited[v]:
                 visited[v] = True
                 cnt += 1
-                if cnt > limit:
-                    return cnt
+                if cnt > limit: # 갯수가 half를 넘었으면 더이상 의미 없음, return
+                    return True
                 q.append(v)
-    return cnt
+    return False
 
 for i in range(1, n+1):
-    if bfs_count(i, arr, half) > half or bfs_count(i, rev, half) > half:
+    if bfs_count(i, arr, half) or bfs_count(i, rev, half):
+        # or 연산은 앞이 true면 뒷 부분 실행 안함
         ans += 1
 
 print(ans)
