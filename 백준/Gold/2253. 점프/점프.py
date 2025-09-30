@@ -1,5 +1,4 @@
 import sys
-from collections import deque
 
 input = sys.stdin.readline
 
@@ -10,35 +9,25 @@ for _ in range(m):
     s = int(input())
     small.add(s)
 
-q = deque()
-dist = {(1, 0): 0}
-q.append((1, 0))
-candidate = [-1, 0, 1]
+inf = float('inf')
+max_v = int((2 * n) ** 0.5) + 2  # 최대 속도
 
-def bfs():
-    while q:
-        s, prev = q.popleft()
-        
-        if s == n:
-            print(dist[(s, prev)])
-            return
-        
-        for i in candidate:
-            next = prev + i
-            
-            if next <= 0:
-                continue
+# dp[i][j] = i번째 돌에 속도 j로 도착하는 최소 점프 횟수
+dp = [[inf] * max_v for _ in range(n + 1)]
+dp[1][0] = 0
 
-            nStone = s + next
-            
-            if nStone > n:
-                break
-            
-            if nStone not in small:
-                if (nStone, next) not in dist:
-                    dist[(nStone, next)] = dist[(s, prev)] + 1
-                    q.append((nStone, next))
+for i in range(2, n + 1):
+    if i in small:  # 작은 돌은 건너뛰기
+        continue
     
-    print(-1)
+    for j in range(1, int((2 * i) ** 0.5) + 2):  # 가능한 속도 범위
+        # i-j 위치에서 속도 j-1, j, j+1로 도착했을 때
+        if i - j >= 1:
+            dp[i][j] = min(
+                dp[i-j][j-1] if j-1 >= 0 else inf,
+                dp[i-j][j],
+                dp[i-j][j+1] if j+1 < max_v else inf
+            ) + 1
 
-bfs()
+answer = min(dp[n])
+print(answer if answer != inf else -1)
