@@ -25,12 +25,16 @@ def bfs():
         
         for i in candidate:
             next = prev + i
+            
+            if next <= 0:
+                continue
+
             nStone = s + next
             
             if nStone > n:
                 break
             
-            if next > 0 and nStone not in small:
+            if nStone not in small:
                 if (nStone, next) not in dist:
                     dist[(nStone, next)] = dist[(s, prev)] + 1
                     q.append((nStone, next))
